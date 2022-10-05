@@ -18,7 +18,10 @@ TARGET_OS=linux
 .PHONY: all gobuild static xplatform-build docker release certs test clean netkitten test-registry benchmark-test gogenerate run-integ-tests pause-container get-cni-sources cni-plugins test-artifacts release-agent release-agent-internal
 BUILD_PLATFORM:=$(shell uname -m)
 
-ifeq (${BUILD_PLATFORM},aarch64)
+ifeq (${BUILD_PLATFORM},armv7l)
+	GOARCH=arm
+	GOARM=7
+else ifeq (${BUILD_PLATFORM},aarch64)
 	GOARCH=arm64
 else
 	GOARCH=amd64
@@ -53,6 +56,7 @@ static:
 
 # Cross-platform build target for static checks
 xplatform-build:
+	GOOS=linux GOARCH=arm GOARM=7 ./scripts/build true "" false
 	GOOS=linux GOARCH=arm64 ./scripts/build true "" false
 	GOOS=windows GOARCH=amd64 ./scripts/build true "" false
 	# Agent and its dependencies on Go 1.18.x are not compatible with Mac (Darwin).
@@ -228,7 +232,7 @@ build-ecs-cni-plugins:
 	@echo "Built amazon-ecs-cni-plugins successfully."
 
 build-vpc-cni-plugins:
-	@docker build --build-arg GOARCH=$(GOARCH) --build-arg GO_VERSION=$(GO_VERSION) -f $(VPC_CNI_REPOSITORY_DOCKER_FILE) -t "amazon/amazon-ecs-build-vpc-cni-plugins:make" .
+	@docker build --build-arg GOARCH=$(GOARCH) GOARM=$(GOARM) --build-arg GO_VERSION=$(GO_VERSION) -f $(VPC_CNI_REPOSITORY_DOCKER_FILE) -t "amazon/amazon-ecs-build-vpc-cni-plugins:make" .
 	docker run --rm --net=none \
 		-e GO111MODULE=off \
 		-e GIT_SHORT_HASH=$(shell cd $(VPC_CNI_REPOSITORY_SRC_DIR) && git rev-parse --short=8 HEAD) \
