@@ -18,6 +18,9 @@ case $(uname -m) in
     x86_64)
         architecture="amd64"
         ;;
+    armv7l)
+        architecture="arm"
+        ;;
     arm64)
         architecture="arm64"
         ;;
@@ -30,6 +33,7 @@ case $(uname -m) in
 esac
 
 if [ "$architecture" == "amd64" ]; then export GOARCH=amd64; fi
+if [ "$architecture" == "arm" ]; then export GOARCH=arm; fi
 if [ "$architecture" == "arm64" ]; then export GOARCH=arm64; fi
 
 # if golang isn't installed then we'll install it
