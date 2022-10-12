@@ -42,7 +42,7 @@ const (
 	serviceStartMaxRetryTime      = time.Second * 15
 	serviceStartRetryJitter       = 0.10
 	serviceStartRetryMultiplier   = 2.0
-	serviceStartMaxRetries        = math.MaxInt64 // essentially retry forever
+	serviceStartMaxRetries        = math.MaxInt   // essentially retry forever
 	failedContainerLogWindowSize  = "200"         // as string for log config
 )
 
