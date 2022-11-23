@@ -21,13 +21,16 @@ set -ex
 architecture=""
 case $(uname -m) in
     x86_64)
-	architecture="amd64"
+	      architecture="amd64"
         ;;
     arm64)
         architecture="arm64"
         ;;
     aarch64)
         architecture="arm64"
+        ;;
+    armv7l)
+        architecture="arm"
         ;;
     *)
         echo $"Unknown architecture $0"
@@ -36,6 +39,7 @@ esac
 
 if [ "$architecture" == "amd64" ]; then export GOARCH=amd64; fi
 if [ "$architecture" == "arm64" ]; then export GOARCH=arm64; fi
+if [ "$architecture" == "arm" ]; then export GOARCH=arm; fi
 
 # this script assumes we've run the get-cni-sources make target to update the cni submodules
 ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )

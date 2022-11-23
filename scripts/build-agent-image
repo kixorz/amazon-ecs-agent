@@ -33,6 +33,8 @@ case $(uname -m) in
     aarch64)
         architecture="arm64"
         ;;
+    armv7l)
+        architecture="arm"
     *)
         echo $"Unknown architecture $0"
         exit 1
@@ -40,6 +42,7 @@ esac
 
 if [ "$architecture" == "amd64" ]; then export GOARCH=amd64; fi
 if [ "$architecture" == "arm64" ]; then export GOARCH=arm64; fi
+if [ "$architecture" == "arm" ]; then export GOARCH=arm; fi
 
 # add cni-plugins
 mkdir -p rootfs/amazon-ecs-cni-plugins/
